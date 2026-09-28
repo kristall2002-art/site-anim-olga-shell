@@ -9,6 +9,7 @@ function onView(el,fn,th){
   var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){fn();io.disconnect();}});},{threshold:th||.25});
   io.observe(el);
 }
+function fmt(v){return String(v).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0');}
 function visible(el){return el&&getComputedStyle(el).display!=='none'&&el.getBoundingClientRect().width>0;}
 
 /* 1.1 — заголовок Olga SHELL по буквам */
@@ -29,16 +30,15 @@ function splitTitle(){
 function stats(){
   var hero=document.getElementById('rec844379413');if(!hero||document.getElementById('os-stats'))return;
   var box=document.createElement('div');box.id='os-stats';
-  box.innerHTML='<div class="os-st"><b class="os-cnt" data-v="600" data-s="+">600+</b><span>счастливых образов</span></div>'+
-    '<div class="os-st"><b class="os-cnt" data-v="10" data-s="">10</b><span>лет опыта</span></div>'+
-    '<div class="os-st"><b class="os-cnt" data-v="4.9" data-s="">4.9</b><span>отзывы</span></div>';
+  box.innerHTML='<div class="os-st"><b class="os-cnt" data-v="10000" data-s="">10 000</b><span>образов</span></div>'+
+    '<div class="os-st"><b class="os-cnt" data-v="10" data-s="">10</b><span>лет опыта</span></div>';
   hero.parentNode.insertBefore(box,hero.nextSibling);
   onView(box,function(){
     box.querySelectorAll('.os-cnt').forEach(function(el){
       var raw=el.dataset.v,suf=el.dataset.s,t=parseFloat(raw),dec=raw.indexOf('.')>-1;
       if(RM)return;var st=null;
       function step(ts){if(st===null)st=ts;var p=Math.min(1,(ts-st)/1300),v=t*(1-Math.pow(1-p,3));
-        el.textContent=(dec?v.toFixed(1):Math.round(v))+suf;if(p<1)requestAnimationFrame(step);else el.textContent=raw+suf;}
+        el.textContent=(dec?v.toFixed(1):fmt(Math.round(v)))+suf;if(p<1)requestAnimationFrame(step);else el.textContent=fmt(raw)+suf;}
       el.textContent=(dec?'0.0':'0')+suf;requestAnimationFrame(step);
     });
   },.5);
